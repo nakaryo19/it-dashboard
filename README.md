@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IT情報収集ダッシュボード
 
-## Getting Started
+Zenn・Qiita・GitHub Trending・Hacker News の最新記事を一元管理するダッシュボードです。手動スクレイピング実行・既読管理・お気に入り機能を備えています。
 
-First, run the development server:
+## 機能
+
+- **記事取得** — ボタン1つで4ソースから最新記事を取得（手動実行）
+- **記事一覧** — ソース・既読/未読/お気に入りでフィルタリング
+- **既読管理** — 記事タイトルクリックで自動既読、ボタンでトグル
+- **お気に入り** — 気になる記事を★でブックマーク
+
+## 技術スタック
+
+| カテゴリ | 技術 |
+|---|---|
+| フレームワーク | Next.js 16 (App Router) |
+| データベース | Neon PostgreSQL |
+| ORM | Prisma 7 |
+| スタイリング | Tailwind CSS 4 |
+| テスト | Jest + ts-jest |
+| デプロイ | Vercel |
+
+## 対応ソース
+
+| ソース | 取得方法 |
+|---|---|
+| Zenn | RSS フィード |
+| Qiita | API v2 |
+| GitHub Trending | HTML スクレイピング |
+| Hacker News | Firebase REST API |
+
+## セットアップ
+
+### 1. 依存関係のインストール
+
+```bash
+npm install
+```
+
+### 2. 環境変数の設定
+
+`.env` ファイルの `DATABASE_URL` に Neon PostgreSQL の接続文字列を設定します。
+
+```bash
+# .env
+DATABASE_URL="postgresql://<user>:<password>@<host>/<dbname>?sslmode=require"
+```
+
+[Neon](https://neon.tech) でデータベースを作成し、接続文字列を取得してください。
+
+### 3. データベースのマイグレーション
+
+```bash
+npx prisma migrate dev --name init
+```
+
+### 4. 開発サーバーの起動
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[http://localhost:3000](http://localhost:3000) にアクセスしてください。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## スクリプト
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev          # 開発サーバー起動
+npm run build        # 本番ビルド（prisma generate を含む）
+npm run start        # 本番サーバー起動
+npm test             # テスト実行
+npm run test:coverage  # カバレッジ付きテスト実行
+```
 
-## Learn More
+## デプロイ（Vercel）
 
-To learn more about Next.js, take a look at the following resources:
+1. Vercel プロジェクトの環境変数に `DATABASE_URL` を設定
+2. GitHub リポジトリを Vercel に連携してデプロイ
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+本番環境では `npm run build`（`prisma generate && next build`）が自動実行されます。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## プロジェクト構成
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+├── app/
+│   ├── _components/     # UI コンポーネント
+│   ├── api/             # API Routes
+│   └── page.tsx         # メインページ（Server Component）
+├── lib/
+│   ├── prisma.ts        # Prisma クライアント
+│   └── scrapers/        # 各ソースのスクレイパー
+├── prisma/
+│   ├── schema.prisma    # データモデル
+│   └── migrations/      # マイグレーションファイル
+└── __tests__/           # ユニットテスト
+    ├── api/
+    └── scrapers/
+```

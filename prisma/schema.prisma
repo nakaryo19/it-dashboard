@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SourceType {
+  ZENN
+  QIITA
+  GITHUB_TRENDING
+  HACKER_NEWS
+}
+
+model Article {
+  id          String     @id @default(cuid())
+  sourceType  SourceType
+  title       String
+  url         String     @unique
+  publishedAt DateTime?
+  tags        String[]
+  isRead      Boolean    @default(false)
+  isFavorite  Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}

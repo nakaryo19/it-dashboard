@@ -37,6 +37,7 @@ export default function ArticleCard({ article, onToggleRead, onToggleFavorite }:
 
   return (
     <div
+      data-testid="article-card"
       className={`flex flex-col gap-2 rounded-xl border p-4 transition-colors ${
         article.isRead
           ? "border-zinc-100 bg-zinc-50"
@@ -65,6 +66,7 @@ export default function ArticleCard({ article, onToggleRead, onToggleFavorite }:
           <button
             onClick={() => onToggleRead(article.id)}
             title={article.isRead ? "未読に戻す" : "既読にする"}
+            data-testid="read-toggle"
             className={`rounded px-2 py-0.5 text-xs font-medium transition-colors ${
               article.isRead
                 ? "bg-zinc-200 text-zinc-500 hover:bg-zinc-300"
@@ -80,6 +82,7 @@ export default function ArticleCard({ article, onToggleRead, onToggleFavorite }:
         target="_blank"
         rel="noopener noreferrer"
         onClick={handleTitleClick}
+        data-testid="article-title"
         className={`text-sm font-medium leading-snug hover:underline ${
           article.isRead ? "text-zinc-400" : "text-zinc-900"
         }`}

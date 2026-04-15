@@ -34,6 +34,7 @@ export default function ScrapeButton() {
       <button
         onClick={handleScrape}
         disabled={loading}
+        data-testid="scrape-button"
         className="flex w-28 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {loading ? (
@@ -46,7 +47,7 @@ export default function ScrapeButton() {
         )}
       </button>
       {result && !loading && (
-        <p className="text-xs text-zinc-500">
+        <p data-testid="scrape-result" className="text-xs text-zinc-500">
           {result.count} 件取得（
           {result.success.join("・")}
           {result.failed.length > 0 && (

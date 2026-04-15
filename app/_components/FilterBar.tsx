@@ -46,6 +46,7 @@ export default function FilterBar() {
             <button
               key={s.value}
               onClick={() => update("source", s.value)}
+              data-testid={`source-filter-${s.value}`}
               className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
                 source === s.value
                   ? "bg-blue-600 text-white"
@@ -64,6 +65,7 @@ export default function FilterBar() {
             <button
               key={s.value}
               onClick={() => update("status", s.value)}
+              data-testid={`status-filter-${s.value}`}
               className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
                 status === s.value
                   ? "bg-blue-600 text-white"

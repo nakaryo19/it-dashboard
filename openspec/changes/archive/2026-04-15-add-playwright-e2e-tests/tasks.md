@@ -42,4 +42,4 @@
 ## 6. 動作確認
 
 - [x] 6.1 `npm run test:e2e` を実行してすべてのテストがパスすることを確認する
-- [ ] 6.2 `npm run test:e2e:report` でHTMLレポートを確認する
+- [x] 6.2 `npm run test:e2e:report` でHTMLレポートを確認する

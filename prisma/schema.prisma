@@ -28,4 +28,11 @@ model Article {
   isFavorite  Boolean    @default(false)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+
+  /// Qiita API v2 の body など、規約上取得が許容される本文。取得できないソースでは NULL。
+  bodyText       String?
+  /// pgvector の埋め込みベクトル。Prisma は vector 型を扱えないため読み書きは $queryRaw / psycopg で行う。
+  embedding      Unsupported("vector(1536)")?
+  /// 埋め込み生成に使用したモデル名（例: text-embedding-3-small）。再埋め込み対象の判別に使う。
+  embeddingModel String?
 }

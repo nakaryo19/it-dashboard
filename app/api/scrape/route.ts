@@ -16,11 +16,16 @@ export async function POST() {
             url: article.url,
             publishedAt: article.publishedAt,
             tags: article.tags,
+            bodyText: article.bodyText ?? null,
           },
           update: {
             title: article.title,
             publishedAt: article.publishedAt,
             tags: article.tags,
+            // 本文を取得できなかった場合は既存の bodyText を保持する
+            ...(article.bodyText !== undefined
+              ? { bodyText: article.bodyText }
+              : {}),
           },
         })
       )

@@ -54,6 +54,48 @@ describe("POST /api/scrape", () => {
     expect(body.failed).toHaveLength(0);
   });
 
+  test("正常系: bodyText を持つ記事は create/update の両方に反映される", async () => {
+    const withBody = {
+      ...MOCK_ARTICLE,
+      sourceType: "QIITA" as const,
+      url: "https://qiita.com/user/items/abc123",
+      bodyText: "本文テキスト",
+    };
+    mockScrapeAll.mockResolvedValueOnce({
+      success: ["QIITA"],
+      failed: [],
+      articles: [withBody],
+    } as ScrapeResult);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mockUpsert.mockResolvedValueOnce({ id: "cuid1", ...withBody } as any);
+
+    await POST();
+
+    expect(mockUpsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        create: expect.objectContaining({ bodyText: "本文テキスト" }),
+        update: expect.objectContaining({ bodyText: "本文テキスト" }),
+      })
+    );
+  });
+
+  test("正常系: bodyText が無い記事は create で null になり update では既存値を保持する", async () => {
+    mockScrapeAll.mockResolvedValueOnce({
+      success: ["ZENN"],
+      failed: [],
+      articles: [MOCK_ARTICLE],
+    } as ScrapeResult);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mockUpsert.mockResolvedValueOnce({ id: "cuid1", ...MOCK_ARTICLE } as any);
+
+    await POST();
+
+    const arg = mockUpsert.mock.calls[0][0];
+    expect(arg.create).toMatchObject({ bodyText: null });
+    // update に bodyText を含めないことで既存の本文を上書きしない
+    expect(arg.update).not.toHaveProperty("bodyText");
+  });
+
   test("異常系: 全ソース失敗時は count=0 かつ failed に詳細が入る", async () => {
     mockScrapeAll.mockResolvedValueOnce({
       success: [],

@@ -15,7 +15,7 @@ interface QiitaItem {
  * API が返す body を bodyText として使える形に正規化する。
  * 文字列でない・空白のみの場合は undefined を返し、記事自体の保存は妨げない。
  */
-function normalizeBody(body: unknown): string | undefined {
+export function normalizeBody(body: unknown): string | undefined {
   if (typeof body !== "string") return undefined;
   const trimmed = body.trim();
   return trimmed === "" ? undefined : trimmed;

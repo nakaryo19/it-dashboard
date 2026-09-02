@@ -24,7 +24,7 @@
 - [x] 2.2 `lib/scrapers/qiita.ts` で API v2 レスポンスの `body` を取得・格納する
 - [x] 2.3 `app/api/scrape/route.ts` の upsert に `bodyText` を含める
 - [x] 2.4 既存の Jest テストを更新し、本文取得のテストケースを追加する
-- [ ] 2.5 スクレイピングを実行し、Qiita 記事に `bodyText` が入ることを確認する
+- [x] 2.5 スクレイピングを実行し、Qiita 記事に `bodyText` が入ることを確認する
 
 ## 3. Python サービス: 埋め込み生成（Week 1）
 

@@ -19,6 +19,24 @@ MAX_EMBEDDING_CHARS = int(os.getenv("MAX_EMBEDDING_CHARS", "7000"))
 # OpenAI Embeddings API は 1 リクエストに複数入力を渡せる。
 EMBED_BATCH_SIZE = int(os.getenv("EMBED_BATCH_SIZE", "100"))
 
+# 検索で返す記事の既定件数。リクエストの top_k で上書きできる。
+SEARCH_TOP_K = int(os.getenv("SEARCH_TOP_K", "20"))
+SEARCH_MAX_TOP_K = 100
+
+# コサイン類似度のカットオフ。これ未満の記事は関連性が低いとみなして除外する。
+# 実データ 282 件での計測（tasks 4.6）:
+#   - 無関係なクエリ（「犬の散歩コース」等）の最高スコアは 0.28 前後
+#   - 関連するクエリの妥当な結果は 0.31〜0.51
+# ノイズ帯の直上として 0.30 を既定値とする。
+SEARCH_MIN_SIMILARITY = float(os.getenv("SEARCH_MIN_SIMILARITY", "0.30"))
+
+# ブラウザから直接叩かせないため、本番は Vercel のドメインのみ許可する。
+ALLOWED_ORIGINS = [
+    o.strip()
+    for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+    if o.strip()
+]
+
 
 def _load_dotenv() -> None:
     """ローカル実行用に、リポジトリルートの .env を最小限パースする。
@@ -51,4 +69,17 @@ def get_openai_api_key() -> str:
     key = os.getenv("OPENAI_API_KEY")
     if not key:
         raise RuntimeError("OPENAI_API_KEY が未設定です")
+    return key
+
+
+def get_service_api_key() -> str:
+    """Next.js の API Route からの呼び出しを認証するための共有キー。
+
+    未設定のまま公開すると誰でも OpenAI の課金を発生させられるため、
+    フェイルクローズ（未設定なら例外）とする。
+    """
+    _load_dotenv()
+    key = os.getenv("AI_SERVICE_API_KEY")
+    if not key:
+        raise RuntimeError("AI_SERVICE_API_KEY が未設定です")
     return key

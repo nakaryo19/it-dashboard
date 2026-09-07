@@ -1,0 +1,22 @@
+[project]
+name = "ai-service"
+version = "0.1.0"
+description = "it-dashboard の埋め込み生成・ベクトル検索サービス"
+requires-python = ">=3.12,<3.13"
+# Lambda のコンテナイメージを肥大化させないため、依存は最小限に保つ。
+dependencies = [
+    "fastapi>=0.115",
+    "mangum>=0.19",
+    "openai>=1.55",
+    "psycopg[binary]>=3.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "httpx>=0.28",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

@@ -28,19 +28,19 @@
 
 ## 3. Python サービス: 埋め込み生成（Week 1）
 
-- [ ] 3.1 `ai-service/` ディレクトリを作成し、FastAPI プロジェクトを初期化する
-- [ ] 3.2 依存を最小限に定義する（`fastapi` / `openai` / `psycopg` / `mangum`。**不要な重量級ライブラリを入れない**）
-- [ ] 3.3 DB 接続モジュールを実装する（Neon の pooled 接続を使用）
-- [ ] 3.4 `POST /embed` を実装する
+- [x] 3.1 `ai-service/` ディレクトリを作成し、FastAPI プロジェクトを初期化する
+- [x] 3.2 依存を最小限に定義する（`fastapi` / `openai` / `psycopg` / `mangum`。**不要な重量級ライブラリを入れない**）
+- [x] 3.3 DB 接続モジュールを実装する（Neon の pooled 接続を使用）
+- [x] 3.4 `POST /embed` を実装する
   - `embedding IS NULL` の記事を取得
   - タイトル＋`bodyText`（＋タグ）を結合して埋め込み対象テキストを構成
   - OpenAI Embeddings API を 100 件ずつバッチ呼び出し
   - `embedding` と `embeddingModel` を UPDATE
   - レート制限・APIエラー時のリトライとスキップ処理
-- [ ] 3.5 `GET /health` を実装する
-- [ ] 3.6 pytest で埋め込みロジックのテストを書く（OpenAI 呼び出しはモック）
-- [ ] 3.7 **ローカル実行で既存記事を一括埋め込みする**（初回・数十円）
-- [ ] 3.8 `SELECT count(*) FROM "Article" WHERE embedding IS NOT NULL;` で件数を確認する
+- [x] 3.5 `GET /health` を実装する
+- [x] 3.6 pytest で埋め込みロジックのテストを書く（OpenAI 呼び出しはモック）
+- [x] 3.7 **ローカル実行で既存記事を一括埋め込みする**（初回・数十円）
+- [x] 3.8 `SELECT count(*) FROM "Article" WHERE embedding IS NOT NULL;` で件数を確認する
 
 ## 4. Python サービス: 検索API（Week 2）
 

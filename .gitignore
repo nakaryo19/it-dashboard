@@ -52,3 +52,9 @@ next-env.d.ts
 # playwright
 /playwright-report
 /test-results
+
+# python (ai-service)
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/

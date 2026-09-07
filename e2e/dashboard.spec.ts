@@ -154,6 +154,62 @@ test.describe("ダッシュボード", () => {
   });
 
   // ──────────────────────────────────────────────────────────────────────────
+  // 検索
+  // NOTE: 検索は Server Component から ai-service を呼ぶため page.route では
+  //       モックできません。ここでは URL 同期と、AI サービス未設定時にも
+  //       既存機能が使えること（spec の劣化耐性シナリオ）を確認します。
+  // ──────────────────────────────────────────────────────────────────────────
+  test.describe("検索", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/");
+    });
+
+    test("検索実行でクエリが URL の q に反映される", async ({ page }) => {
+      await page.getByTestId("search-input").fill("LLMのコスト削減");
+      await page.getByTestId("search-submit").click();
+
+      await expect(page).toHaveURL(/q=LLM/);
+    });
+
+    test("空文字で検索しても q は付与されない", async ({ page }) => {
+      await page.getByTestId("search-input").fill("   ");
+      await page.getByTestId("search-submit").click();
+
+      await expect(page).not.toHaveURL(/q=/);
+    });
+
+    test("q を含む URL を直接開くと入力欄に復元される", async ({ page }) => {
+      await page.goto("/?q=Rust%E3%81%AE%E9%9D%9E%E5%90%8C%E6%9C%9F");
+
+      await expect(page.getByTestId("search-input")).toHaveValue("Rustの非同期");
+    });
+
+    test("クリアボタンで q が URL から外れる", async ({ page }) => {
+      await page.goto("/?q=Rust");
+
+      await page.getByTestId("search-clear").click();
+
+      await expect(page).not.toHaveURL(/q=/);
+      await expect(page.getByTestId("search-input")).toHaveValue("");
+    });
+
+    test("フィルタを選択しても検索クエリが維持される", async ({ page }) => {
+      await page.goto("/?q=Rust");
+
+      await page.getByTestId("source-filter-ZENN").click();
+
+      await expect(page).toHaveURL(/q=Rust/);
+      await expect(page).toHaveURL(/source=ZENN/);
+    });
+
+    test("検索の前提を説明する注記が表示される", async ({ page }) => {
+      await expect(
+        page.getByText("検索は記事の要約情報に基づきます")
+      ).toBeVisible();
+    });
+  });
+
+  // ──────────────────────────────────────────────────────────────────────────
   // 既読切替
   // NOTE: DB に未読記事が 1 件以上ないとスキップされるテストがあります。
   //       ローカルでは `npm run dev` 起動後にスクレイプを実行してから

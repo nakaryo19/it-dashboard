@@ -56,17 +56,17 @@
 
 ## 5. Next.js 側の検索UI（Week 2）
 
-- [ ] 5.1 `app/api/search/route.ts` を作成し、Python サービスへプロキシする GET ハンドラーを実装する
+- [x] 5.1 `app/api/search/route.ts` を作成し、Python サービスへプロキシする GET ハンドラーを実装する
   - AI サービスの URL / API キーはサーバー側環境変数から読む
   - 記事 ID 配列を受け取り、Prisma で記事本体を取得
   - `source` / `status` フィルタを AND で適用
   - 検索結果の並び順（類似度順）を維持する
-- [ ] 5.2 `app/_components/SearchBox.tsx` を作成する（Client Component、URL の `q` と同期）
-- [ ] 5.3 検索 UI に「検索は記事の要約情報に基づきます」の注記を表示する
-- [ ] 5.4 `app/page.tsx` で `q` パラメータがある場合は検索結果を表示するよう分岐する
-- [ ] 5.5 検索結果0件時の空状態 UI を実装する
-- [ ] 5.6 AI サービスのエラー時に既存機能が動作し続けることを確認する
-- [ ] 5.7 Jest / Playwright のテストを追加する（検索、フィルタ併用、空状態）
+- [x] 5.2 `app/_components/SearchBox.tsx` を作成する（Client Component、URL の `q` と同期）
+- [x] 5.3 検索 UI に「検索は記事の要約情報に基づきます」の注記を表示する
+- [x] 5.4 `app/page.tsx` で `q` パラメータがある場合は検索結果を表示するよう分岐する
+- [x] 5.5 検索結果0件時の空状態 UI を実装する
+- [x] 5.6 AI サービスのエラー時に既存機能が動作し続けることを確認する
+- [x] 5.7 Jest / Playwright のテストを追加する（検索、フィルタ併用、空状態）
 
 ## 6. インフラ構築（Week 3）
 

@@ -68,5 +68,35 @@ def update_embeddings(
     return len(params)
 
 
+def search_similar(
+    conn: psycopg.Connection,
+    query_vector: list[float],
+    top_k: int,
+    min_similarity: float,
+) -> list[dict]:
+    """コサイン距離（<=>）の近い順に記事を返す。
+
+    pgvector の `<=>` は距離（0 が最も近い）なので、類似度は 1 - 距離。
+    カットオフは LIMIT より前の WHERE で効かせ、関連する記事だけで上位 N 件を埋める。
+    記事数は数千件規模のため、インデックスは作らず逐次スキャンで足りる。
+    """
+    literal = to_vector_literal(query_vector)
+    max_distance = 1.0 - min_similarity
+
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT id, 1 - (embedding <=> %(v)s::vector) AS score
+            FROM "Article"
+            WHERE embedding IS NOT NULL
+              AND (embedding <=> %(v)s::vector) <= %(max_distance)s
+            ORDER BY embedding <=> %(v)s::vector
+            LIMIT %(top_k)s
+            """,
+            {"v": literal, "max_distance": max_distance, "top_k": top_k},
+        )
+        return [{"id": r[0], "score": float(r[1])} for r in cur.fetchall()]
+
+
 def to_vector_literal(vector: list[float]) -> str:
     return "[" + ",".join(repr(float(v)) for v in vector) + "]"

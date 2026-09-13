@@ -2,6 +2,8 @@
 
 Zenn・Qiita・GitHub Trending・Hacker News の最新記事を一元管理するダッシュボードです。手動スクレイピング実行・既読管理・お気に入り機能を備えています。
 
+**デプロイ済みアプリ: https://it-dashboard-six.vercel.app/**
+
 ## 機能
 
 - **記事取得** — ボタン1つで4ソースから最新記事を取得（手動実行）
@@ -78,6 +80,8 @@ npm run test:coverage  # カバレッジ付きテスト実行
 2. GitHub リポジトリを Vercel に連携してデプロイ
 
 本番環境では `npm run build`（`prisma generate && next build`）が自動実行されます。
+
+デプロイ先: https://it-dashboard-six.vercel.app/
 
 ## プロジェクト構成
 
